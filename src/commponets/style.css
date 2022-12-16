@@ -1,0 +1,12 @@
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 0px;
+}
+
+.dFlex {
+  display: flex;
+  justify-content: center;
+}
