@@ -1,13 +1,17 @@
-import React from "react";
-import {
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import React, { useEffect } from "react";
+import { EllipsisOutlined, LikeOutlined, LikeFilled } from "@ant-design/icons";
 import { Avatar, Card } from "antd";
 import "./style.css";
+import { addDoc, doc } from "firebase/firestore";
+import { db } from "../firebase/firebase";
 const { Meta } = Card;
 const MainContent = ({ feeds }) => {
+  console.log(feeds, "feeds");
+  const handleLike = async (like) => {
+    debugger;
+    const messageRef = await addDoc(db, "userData", "roomA", "messages");
+    console.log("like", messageRef);
+  };
   return (
     <div className='mainContent'>
       {" "}
@@ -15,7 +19,6 @@ const MainContent = ({ feeds }) => {
         avatar={
           <Avatar src='https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=700' />
         }
-        // description='profile Img'
       />
       <Card
         style={{
@@ -24,12 +27,13 @@ const MainContent = ({ feeds }) => {
         cover={
           <img
             alt='example'
-            src='https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
+            src={feeds.image}
+            // src='https://firebasestorage.googleapis.com/v0/b/emotion-app-6dc50.appspot.com/o/pexels-photo-2379004.jpeg?alt=media&token=b05cf9e2-4885-4e9a-95aa-31b4cb7281cf'
           />
         }
         actions={[
-          <SettingOutlined key='setting' />,
-          <EditOutlined key='edit' />,
+          <LikeOutlined key='like' onClick={handleLike} />,
+          <LikeFilled key='filled' />,
           <EllipsisOutlined key='ellipsis' />,
         ]}>
         <Meta
@@ -38,6 +42,7 @@ const MainContent = ({ feeds }) => {
           description='This is the description'
         />
         {feeds?.nickName}-{feeds.Bio}--{feeds.Religion}
+        {/* <img src={feeds?.image} alt='alterrrr ' /> */}
       </Card>
     </div>
   );

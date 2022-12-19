@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Button, Layout } from "antd";
 import MainContent from "./../../commponets/MainContent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../../firebase/firebase";
 import { onSnapshot, collection } from "firebase/firestore";
 import "./style.css";
+import { handleFeeds } from "../../redux/UserSlice";
 const { Header, Footer, Sider, Content } = Layout;
 const Home = () => {
   const [timeline, setTimeline] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { userID } = useSelector((store) => store.currentUser);
   console.log("**", userID);
   useEffect(() => {
     const realTimeFeeds = onSnapshot(
-      collection(db, "userProfile"),
+      collection(db, "usersData"),
       (querysnapshot) => {
         const temp = [];
         querysnapshot.docs.forEach((doc) => {
@@ -23,12 +25,13 @@ const Home = () => {
           temp.push({ ...doc.data(), id: doc.id });
         });
         setTimeline(temp);
+        dispatch(handleFeeds(temp));
       }
     );
     return () => {
       realTimeFeeds();
     };
-  });
+  }, []);
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
@@ -43,17 +46,18 @@ const Home = () => {
   return (
     <>
       <Layout style={{ height: "100vh" }}>
-        <Sider>
-          <Link to='/createprofile'>
-            {" "}
-            <Button type='primary'>Add new feed</Button>
-          </Link>
-          <Link to='/feeds'>
-            <Button type='primary'>My feed</Button>
-          </Link>
-        </Sider>
+        <Sider className='header-wrapper'></Sider>
         <Layout>
-          <Header>Header</Header>
+          <Header className='header-wrapper'>
+            Header{" "}
+            <Link to='/createprofile'>
+              {" "}
+              <Button type='primary'>Add new feed</Button>
+            </Link>
+            <Link to='/feeds'>
+              <Button type='primary'>My feed</Button>
+            </Link>
+          </Header>
           <Content className='content-wrapper'>
             {timeline.map((feed) => (
               <MainContent feeds={feed} />

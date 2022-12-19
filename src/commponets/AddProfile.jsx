@@ -1,31 +1,52 @@
 import React, { useState } from "react";
-import { InboxOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Upload, DatePicker, Row } from "antd";
+import { InboxOutlined, UserOutlined, UploadOutline } from "@ant-design/icons";
+import { Form, Input, Button, Upload, DatePicker, Row, Avatar } from "antd";
 import { Layout } from "antd";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { addDoc, collection, doc } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import { db, storage } from "../firebase/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 const { Header, Footer, Sider, Content } = Layout;
 const { TextArea } = Input;
 const AddProfile = () => {
+  const [image, setImage] = useState(null);
+  const [imageUrl, setimageUrl] = useState(null);
   const { userID } = useSelector((store) => store.currentUser);
   console.log(userID);
+  const handleImageUpload = (image) => {
+    debugger;
+    const { name } = image;
+    const imageRef = ref(storage, name);
+    uploadBytes(imageRef, image).then(() => {
+      getDownloadURL(imageRef)
+        .then((url) => {
+          debugger;
+          setimageUrl(url);
+        })
+        .catch((err) => {
+          alert("Error:", err);
+        });
+    });
+  };
   const onFinish = async (values) => {
+    debugger;
     console.log("Success:", values);
+
+    console.log(imageUrl, "sd");
     const data = {
       ...values,
       id: userID,
+      image: imageUrl,
     };
-    const users = await addDoc(collection(db, "userProfile"), data);
-    // await doc(db, "users", userID, values);
-    console.log(users);
+    await addDoc(collection(db, "usersData"), data);
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
   const normFile = (e) => {
     console.log("Upload event:", e);
+    debugger;
     if (Array.isArray(e)) {
       return e;
     }
@@ -117,25 +138,56 @@ const AddProfile = () => {
             </div>
           </Upload>
         </Form.Item> */}
-            {/* <Form.Item label='Profile Picture'>
-              <Form.Item
-                name='dragger'
+            <Form.Item label='Profile Picture'>
+              {/* <Form.Item
+                name='image'
                 valuePropName='fileList'
                 getValueFromEvent={normFile}
                 noStyle>
-                <Upload.Dragger name='files' action='/upload.do'>
-                  <p className='ant-upload-drag-icon'>
-                    <InboxOutlined />
-                  </p>
-                  <p className='ant-upload-text'>
-                    Click or drag file to this area to upload
-                  </p>
-                  <p className='ant-upload-hint'>
-                    Support for a single or bulk upload.
-                  </p>
+                <Upload.Dragger>
+                  <Avatar
+                    name='files'
+                    action='/upload.do'
+                    size={64}
+                    icon={<UserOutlined />}
+                  />
                 </Upload.Dragger>
+              </Form.Item> */}
+              <Form.Item
+                name='image'
+                getValueFromEvent={normFile}
+                valuePropName='fileList'>
+                <Upload
+                  action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
+                  listType='picture'
+                  beforeUpload={(e) => {
+                    console.log("IMAGE", e);
+                    handleImageUpload(e);
+                  }}
+                  maxCount={1}>
+                  <Button
+                  // icon={<UploadOutline />}
+                  >
+                    Upload (Max: 1)
+                  </Button>
+                </Upload>
               </Form.Item>
+            </Form.Item>
+            {/* <Form.Item
+              name='upload'
+              label='Upload'
+              valuePropName='fileList'
+              getValueFromEvent={normFile}
+              extra='long'>
+              <Upload name='logo' action='/upload.do' listType='picture'>
+                <Button
+                //   icon={<UploadOutlined />}
+                >
+                  Click to upload
+                </Button>
+              </Upload>
             </Form.Item> */}
+
             <Form.Item
               wrapperCol={{
                 offset: 8,
