@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import { InboxOutlined, UserOutlined, UploadOutline } from "@ant-design/icons";
-import { Form, Input, Button, Upload, DatePicker, Row, Avatar } from "antd";
+import {
+  UserOutlined,
+  HeartOutlined,
+  CloudUploadOutlined,
+  VerifiedOutlined,
+} from "@ant-design/icons";
+import { Form, Input, Button, Upload, Avatar, message } from "antd";
 import { Layout } from "antd";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { addDoc, collection, doc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db, storage } from "../firebase/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 const { Header, Footer, Sider, Content } = Layout;
 const { TextArea } = Input;
 const AddProfile = () => {
-  const [image, setImage] = useState(null);
   const [imageUrl, setimageUrl] = useState(null);
   const { userID } = useSelector((store) => store.currentUser);
   console.log(userID);
@@ -29,17 +33,23 @@ const AddProfile = () => {
         });
     });
   };
+  const [form] = Form.useForm();
   const onFinish = async (values) => {
     debugger;
-    console.log("Success:", values);
-
-    console.log(imageUrl, "sd");
     const data = {
       ...values,
       id: userID,
       image: imageUrl,
+      likes: [],
     };
-    await addDoc(collection(db, "usersData"), data);
+    const hide = message.loading("New Feed Creation in progress..", 0);
+    // Dismiss manually and asynchronously
+    setTimeout(hide, 1000);
+    await addDoc(collection(db, "usersData"), data).then(() => {
+      debugger;
+      message.success("Feed Created successfully");
+      form.resetFields();
+    });
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -53,17 +63,12 @@ const AddProfile = () => {
     return e?.fileList;
   };
   return (
-    <Layout style={{ height: "100vh" }}>
-      <Sider>
-        {" "}
-        <button type='primary'>
-          <Link to='/'> Home</Link>
-        </button>
-      </Sider>
-      <Layout>
-        <Header> Create Profile</Header>
-        <Content className='dFlex'>
+    <Content className=''>
+      <div className=' addProfileWrapper'>
+        <div className='formWraper'>
           <Form
+            form={form}
+            className='widthFull'
             name='basic'
             labelCol={{
               span: 8,
@@ -77,98 +82,86 @@ const AddProfile = () => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete='off'>
-            <Row>
-              <Form.Item
-                label='Nick Name'
-                name='nickName'
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your nickName!",
-                  },
-                ]}>
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                label='Religion'
-                name='Religion'
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your Religion!",
-                  },
-                ]}>
-                <Input />
-              </Form.Item>
-            </Row>
-            {/* <Form.Item
-              label='Date Of Birth'
-              name='DOB'
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your DOB!",
-                  },
-                ]}
-            >
-              <DatePicker />
-            </Form.Item> */}
             <Form.Item
-              label='BIO'
+              className=''
+              label='Name'
+              name='nickName'
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your nickName!",
+                },
+              ]}>
+              <Input
+                size='large'
+                placeholder='Enter your name'
+                prefix={<UserOutlined />}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label='Religion'
+              name='Religion'
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Religion!",
+                },
+              ]}>
+              <Input
+                size='large'
+                placeholder='Enter your Religion'
+                prefix={<HeartOutlined />}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label='Description'
               name='Bio'
               rules={[
                 {
                   required: true,
-                  message: "Please input your BIO!",
+                  message: "Please input your Description!",
                 },
               ]}>
-              <TextArea rows={4} />
+              <TextArea
+                // prefix={<VerifiedOutlined />}
+                size='large'
+                // placeholder='Please describe your self'
+                rows={4}
+              />
             </Form.Item>
-            {/* <Form.Item label='Profile' valuePropName='fileList'>
-          <Upload action='/upload.do' listType='picture-card'>
-            <div>
-              <PlusOutlined />
-              <div
-                style={{
-                  marginTop: 8,
-                }}>
-                Upload
-              </div>
-            </div>
-          </Upload>
-        </Form.Item> */}
+
             <Form.Item label='Profile Picture'>
               {/* <Form.Item
-                name='image'
-                valuePropName='fileList'
-                getValueFromEvent={normFile}
-                noStyle>
-                <Upload.Dragger>
-                  <Avatar
-                    name='files'
-                    action='/upload.do'
-                    size={64}
-                    icon={<UserOutlined />}
-                  />
-                </Upload.Dragger>
-              </Form.Item> */}
+                    name='image'
+                    valuePropName='fileList'
+                    getValueFromEvent={normFile}
+                    noStyle>
+                    <Upload.Dragger>
+                      <Avatar
+                        name='files'
+                        action='/upload.do'
+                        size={64}
+                        icon={<UserOutlined />}
+                      />
+                    </Upload.Dragger>
+                  </Form.Item> */}
               <Form.Item
                 name='image'
                 getValueFromEvent={normFile}
                 valuePropName='fileList'>
                 <Upload
-                  action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
+                  className='widthFull'
+                  // action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
                   listType='picture'
                   beforeUpload={(e) => {
                     console.log("IMAGE", e);
                     handleImageUpload(e);
                   }}
                   maxCount={1}>
-                  <Button
-                  // icon={<UploadOutline />}
-                  >
-                    Upload (Max: 1)
+                  <Button size='large' icon={<CloudUploadOutlined />}>
+                    Upload Picture
                   </Button>
                 </Upload>
               </Form.Item>
@@ -193,16 +186,14 @@ const AddProfile = () => {
                 offset: 8,
                 span: 16,
               }}>
-              <Button type='primary' htmlType='submit'>
+              <Button className='submitForm' type='primary' htmlType='submit'>
                 Submit
               </Button>
             </Form.Item>
           </Form>
-        </Content>
-        <Footer></Footer>
-      </Layout>
-      <Sider>Sider</Sider>
-    </Layout>
+        </div>
+      </div>
+    </Content>
   );
 };
 

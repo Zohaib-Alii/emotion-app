@@ -16,9 +16,10 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        const uid = user.uid;
-        dispatch(settingUserID(uid));
-        console.log(user, uid, "&&&&&&&");
+        // const uid = user.uid;
+        debugger;
+        dispatch(settingUserID(user));
+        console.log(user, "App.js use effect ");
       } else {
         // User is signed out
         dispatch(settingUserID(null));
@@ -33,11 +34,12 @@ function App() {
   return (
     <div className=''>
       <Routes>
-        <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/createProfile' element={<AddProfile />} />
-        <Route path='/feeds' element={<Feeds />} />
+        <Route path='/dashboard/*' element={<Home />} />
+
+        {/* <Route path='/createProfile' element={<AddProfile />} />
+        <Route path='/feeds' element={<Feeds />} /> */}
       </Routes>
     </div>
   );

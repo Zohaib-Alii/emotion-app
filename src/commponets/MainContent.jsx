@@ -1,48 +1,128 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { EllipsisOutlined, LikeOutlined, LikeFilled } from "@ant-design/icons";
-import { Avatar, Card } from "antd";
+import { Avatar, Button, Card, Tooltip } from "antd";
 import "./style.css";
-import { addDoc, doc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase/firebase";
+import { useSelector } from "react-redux";
 const { Meta } = Card;
 const MainContent = ({ feeds }) => {
-  console.log(feeds, "feeds");
-  const handleLike = async (like) => {
+  const { image, likes } = feeds;
+  console.log(likes, "likeees");
+  const { userID: currentUserId, userName: currentUserName } = useSelector(
+    (store) => store.currentUser
+  );
+  // const currentUserName = useSelector((store) => store.currentUser.userName);
+  const [alreadyLike, setAlreadyLike] = useState(false);
+  useEffect(() => {
     debugger;
-    const messageRef = await addDoc(db, "userData", "roomA", "messages");
-    console.log("like", messageRef);
+    if (feeds.likes) {
+      const checkk = feeds?.likes.find(
+        (item) => item.likerId === currentUserId
+      );
+      setAlreadyLike(checkk);
+      console.log("render", checkk, "checkk");
+    }
+  }, [feeds]);
+  //  likes handler method
+  const handleLike = async (postId) => {
+    debugger;
+    const docRef = doc(db, "usersData", postId);
+    const currentDoc = await getDoc(docRef);
+    const prevLikes = await currentDoc.data().likes;
+    if (prevLikes.length > 0) {
+      const alreadyLike = prevLikes.find(
+        (item) => item.likerId === currentUserId
+      );
+      // remove likes
+      if (alreadyLike) {
+        const disLike = prevLikes.filter(
+          (item) => item.likerId !== currentUserId
+        );
+        await updateDoc(docRef, {
+          likes: [...disLike],
+        });
+      } else {
+        // already likes and add new likes
+        await updateDoc(docRef, {
+          likes: [
+            ...prevLikes,
+            {
+              likerName: currentUserName,
+
+              likerId: currentUserId,
+              likedOn: new Date(),
+              status: "liked",
+            },
+          ],
+        });
+      }
+    } else {
+      // add first like
+      await updateDoc(docRef, {
+        likes: [
+          {
+            likerName: currentUserName,
+            likerId: currentUserId,
+            likedOn: new Date(),
+            status: "liked",
+          },
+        ],
+      });
+    }
+  };
+  const defaultImg =
+    "https://www.pngitem.com/pimgs/m/421-4212266_transparent-default-avatar-png-default-avatar-images-png.png";
+  //  likes showing in tooltip when user hover the like icon
+  const handleLikerName = () => {
+    debugger;
+    let array = [];
+    feeds?.likes?.map((like) => array.push(like?.likerName + "  "));
+    return array;
   };
   return (
-    <div className='mainContent'>
-      {" "}
-      <Meta
-        avatar={
-          <Avatar src='https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=700' />
-        }
-      />
+    <div className='mainContent content-wrapper'>
+      {/* <Meta avatar={<Avatar src={feeds.image} />} /> */}
       <Card
         style={{
           width: 600,
         }}
         cover={
-          <img
-            alt='example'
-            src={feeds.image}
-            // src='https://firebasestorage.googleapis.com/v0/b/emotion-app-6dc50.appspot.com/o/pexels-photo-2379004.jpeg?alt=media&token=b05cf9e2-4885-4e9a-95aa-31b4cb7281cf'
-          />
+          image && <img className='coverImg' alt='Feed_Image' src={image} />
         }
         actions={[
-          <LikeOutlined key='like' onClick={handleLike} />,
-          <LikeFilled key='filled' />,
-          <EllipsisOutlined key='ellipsis' />,
+          <span>
+            {alreadyLike ? (
+              <LikeFilled
+                className='likedIcon'
+                key='filled'
+                onClick={() => handleLike(feeds.id)}
+              />
+            ) : (
+              <LikeOutlined key='like' onClick={() => handleLike(feeds.id)} />
+            )}
+          </span>,
+          <Tooltip placement='topLeft' title={handleLikerName}>
+            <span>{feeds?.likes?.length}- likes</span>
+          </Tooltip>,
         ]}>
         <Meta
-          avatar={<Avatar src='https://joeschmoe.io/api/v1/random' />}
-          title='Card title'
+          avatar={<Avatar src={image ? image : defaultImg} />}
+          title={feeds?.nickName}
           description='This is the description'
         />
-        {feeds?.nickName}-{feeds.Bio}--{feeds.Religion}
-        {/* <img src={feeds?.image} alt='alterrrr ' /> */}
+        {feeds?.likes.find((item) => item === currentUserId) && (
+          <EllipsisOutlined key='ellipsis' />
+        )}
+        {feeds?.nickName}-{feeds?.Bio}--{feeds?.Religion}
       </Card>
     </div>
   );

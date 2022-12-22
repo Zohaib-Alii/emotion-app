@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Checkbox, Form, Input, Layout } from "antd";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -8,12 +8,16 @@ const Signup = () => {
   const navigate = useNavigate();
   const { Content } = Layout;
   const onFinish = (values) => {
-    const { email, password } = values;
-    console.log(email, password, "emai;");
+    const { email, password, Name } = values;
+    console.log(email, password, Name, "emai;");
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
+        await updateProfile(user, {
+          displayName: Name,
+        });
+
         navigate("/login");
         console.log(user, "user created successfully");
       })

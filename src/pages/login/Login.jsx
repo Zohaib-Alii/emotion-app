@@ -4,12 +4,12 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-// import { useDispatch } from "react-redux";
-// import { settingUserID } from "../../redux/UserSlice";
+import { settingUserID } from "../../redux/UserSlice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { Content } = Layout;
   const onFinish = (values) => {
     const { email, password } = values;
@@ -19,8 +19,8 @@ const Login = () => {
         // Signed in
         const user = userCredential.user;
         debugger;
-        // dispatch(settingUserID(user.uid));
-        navigate("/");
+        dispatch(settingUserID(user));
+        navigate("/dashboard");
         console.log(user, "user login");
       })
       .catch((error) => {

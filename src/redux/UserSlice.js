@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  currentUser: "testtt",
+  userName: "New User",
   userID: "123",
   test: false,
   allFeeds: [],
@@ -12,13 +12,18 @@ const currentUserSlice = createSlice({
   initialState,
   reducers: {
     settingUserID: (state, action) => {
-      state.userID = action.payload;
+      state.userID = action.payload?.uid;
+      state.userName = action.payload?.displayName;
     },
     handleFeeds: (state, action) => {
       state.allFeeds = action.payload;
     },
+    handleStateCheck: (state, action) => {
+      state.currentUser = action.payload;
+    },
   },
 });
-export const { settingUserID, handleFeeds } = currentUserSlice.actions;
+export const { settingUserID, handleFeeds, handleStateCheck } =
+  currentUserSlice.actions;
 
 export default currentUserSlice.reducer;

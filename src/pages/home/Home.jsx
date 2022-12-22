@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Button, Layout } from "antd";
 import MainContent from "./../../commponets/MainContent";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../../firebase/firebase";
 import { onSnapshot, collection } from "firebase/firestore";
 import "./style.css";
 import { handleFeeds } from "../../redux/UserSlice";
-const { Header, Footer, Sider, Content } = Layout;
+import HomeContent from "./HomeContent";
+import AddProfile from "./../../commponets/AddProfile";
+import Feeds from "../../commponets/Feeds";
+import logo from "../../assets/images/mainLogo.png";
+import logout from "../../assets/images/logout.png";
+const { Header, Sider } = Layout;
 const Home = () => {
   const [timeline, setTimeline] = useState([]);
   const navigate = useNavigate();
@@ -46,30 +51,34 @@ const Home = () => {
   return (
     <>
       <Layout style={{ height: "100vh" }}>
-        <Sider className='header-wrapper'></Sider>
+        <Sider className='main-Color sidebar-wrapper'>
+          <Link to='/dashboard'>
+            <img className='siteLogo' src={logo} alt='App logo' />
+          </Link>
+          <span onClick={handleLogout}>
+            <img className='logoutIcon' src={logout} alt='Logout logo' />
+          </span>
+        </Sider>
         <Layout>
-          <Header className='header-wrapper'>
-            Header{" "}
-            <Link to='/createprofile'>
-              {" "}
-              <Button type='primary'>Add new feed</Button>
+          <Header className='header-wrapper main-Color'>
+            <Link to='/dashboard'>
+              <div className='main-Heading'>Emotion App</div>
             </Link>
-            <Link to='/feeds'>
-              <Button type='primary'>My feed</Button>
-            </Link>
+            <div className='main-HeadingRight'>
+              <Link to='/dashboard/addNewFeed'>
+                <Button type='primary'>Add new feed</Button>
+              </Link>
+              <Link to='/dashboard/feeds'>
+                <Button type='primary'>My feed</Button>
+              </Link>
+            </div>
           </Header>
-          <Content className='content-wrapper'>
-            {timeline.map((feed) => (
-              <MainContent feeds={feed} />
-            ))}
-          </Content>
-          <Footer>
-            <Button type='primary' onClick={handleLogout}>
-              Logout
-            </Button>
-          </Footer>
+          <Routes>
+            <Route path='*' element={<HomeContent />} />
+            <Route path='addNewFeed' element={<AddProfile />} />
+            <Route path='feeds' element={<Feeds />} />
+          </Routes>
         </Layout>
-        <Sider>Sider</Sider>
       </Layout>
     </>
   );

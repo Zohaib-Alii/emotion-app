@@ -1,7 +1,39 @@
 .content-wrapper {
   overflow: auto;
-  background-color: blueviolet;
 }
 .header-wrapper {
-  background-color: rgb(190, 228, 215) !important;
+  display: flex;
+  justify-content: space-between;
+}
+.main-Heading {
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer !important;
+}
+.main-HeadingRight {
+  width: 20%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-Color {
+  background-color: #371b58 !important;
+}
+.sidebar-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 0 28px 0;
+}
+.siteLogo {
+  width: 155px;
+  cursor: pointer;
+  /* height: 40px; */
+  /* background-color: antiquewhite; */
+}
+.logoutIcon {
+  width: 50px;
+  cursor: pointer !important;
 }

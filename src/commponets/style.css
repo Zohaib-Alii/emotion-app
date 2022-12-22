@@ -10,3 +10,45 @@
   display: flex;
   justify-content: center;
 }
+.likedIcon {
+  color: #1677ff;
+}
+.ant-layout-sider-children {
+  display: contents;
+}
+
+.add-ProfileHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.main-Color {
+  background-color: #371b58 !important;
+}
+.main-Heading {
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+}
+.addProfileWrapper {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+.formWraper {
+  display: flex;
+  align-items: center;
+  width: 60%;
+}
+.widthFull {
+  width: 100% !important;
+}
+.submitForm {
+  float: right;
+}
+
+.content-wrapper {
+  overflow: auto;
+}
+.coverImg {
+  max-height: 350px;
+}
