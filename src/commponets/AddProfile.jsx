@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
 import { db, storage } from "../firebase/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import AddNewFeed from "./drawers/AddNewFeed";
 const { Header, Footer, Sider, Content } = Layout;
 const { TextArea } = Input;
 const AddProfile = () => {
@@ -193,6 +194,7 @@ const AddProfile = () => {
           </Form>
         </div>
       </div>
+      {/* <AddNewFeed /> */}
     </Content>
   );
 };

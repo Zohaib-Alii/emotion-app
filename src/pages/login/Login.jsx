@@ -3,7 +3,7 @@ import { Button, Checkbox, Form, Input, Layout } from "antd";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 import "./style.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { settingUserID } from "../../redux/UserSlice";
 import { useDispatch } from "react-redux";
 
@@ -24,76 +24,79 @@ const Login = () => {
         console.log(user, "user login");
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         alert(errorMessage);
-        // ..
       });
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
   return (
-    <Layout style={{ height: "100vh" }}>
+    <Layout style={{ height: "100vh" }} className='login-wrapper'>
       <Content className='login-container'>
-        <Form
-          name='basic'
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete='off'>
-          <Form.Item
-            label='Email'
-            name='email'
-            rules={[
-              {
-                required: true,
-                message: "Please input your Email!",
-              },
-            ]}>
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label='Password'
-            name='password'
-            rules={[
-              {
-                required: true,
-                message: "Please input your password!",
-              },
-            ]}>
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item
-            name='remember'
-            valuePropName='checked'
+        <div className='from-wrapper'>
+          <Form
+            name='basic'
+            labelCol={{
+              span: 6,
+            }}
             wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
+              span: 18,
+            }}
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete='off'>
+            <Form.Item
+              wrapperCol={{
+                // offset: 1,
+                span: 19,
+              }}
+              // label='Email'
+              label={<label className='inputLabels'>User Email</label>}
+              name='email'
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Email!",
+                },
+              ]}>
+              <Input className='loginInputs' />
+            </Form.Item>
 
-          <Form.Item
-            wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}>
-            <Button type='primary' htmlType='submit'>
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
+            <Form.Item
+              label={<label className='inputLabels'>Password</label>}
+              name='password'
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
+                },
+              ]}>
+              <Input.Password className='loginInputs' />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 6,
+                span: 19,
+              }}>
+              <span className='loginbtn-createAcc'>
+                <span className='alreadySignup'>
+                  Already a member?
+                  <Link to='/signup'>
+                    <span> Sign In</span>
+                  </Link>
+                </span>
+                <Button type='primary' htmlType='submit'>
+                  Submit
+                </Button>
+              </span>
+            </Form.Item>
+          </Form>
+        </div>
       </Content>
     </Layout>
   );

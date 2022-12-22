@@ -3,6 +3,39 @@
   flex-direction: column;
   align-items: center;
   height: 100%;
-  background: aquamarine;
+  /* background: #ae8dcc; */
   justify-content: center;
+}
+.login-wrapper {
+  background-image: url("../../assets/images/loginBg.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.from-wrapper {
+  width: 40%;
+  /* background-color: brown; */
+}
+.loginbtn-createAcc {
+  /* background-color: #460088; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.inputLabels {
+  color: #fff;
+  font-size: 17px !important;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+.loginInputs {
+  padding: 8px 10px;
+}
+.ant-col.ant-col-6.ant-form-item-label.css-dev-only-do-not-override-26rdvq {
+  display: flex;
+  align-items: center;
+}
+.alreadySignup {
+  color: #fff;
 }

@@ -85,12 +85,11 @@ const MainContent = ({ feeds }) => {
   const handleLikerName = () => {
     debugger;
     let array = [];
-    feeds?.likes?.map((like) => array.push(like?.likerName + "  "));
-    return array;
+    feeds?.likes?.map((like) => array.push(like?.likerName));
+    return array.map((like) => <div>{like}</div>);
   };
   return (
     <div className='mainContent content-wrapper'>
-      {/* <Meta avatar={<Avatar src={feeds.image} />} /> */}
       <Card
         style={{
           width: 600,
@@ -110,19 +109,25 @@ const MainContent = ({ feeds }) => {
               <LikeOutlined key='like' onClick={() => handleLike(feeds.id)} />
             )}
           </span>,
-          <Tooltip placement='topLeft' title={handleLikerName}>
-            <span>{feeds?.likes?.length}- likes</span>
-          </Tooltip>,
+          <span>
+            {feeds?.likes?.length > 0 ? (
+              <Tooltip placement='topLeft' title={handleLikerName}>
+                <span>{feeds?.likes?.length}- likes</span>
+              </Tooltip>
+            ) : (
+              <span>First like </span>
+            )}
+          </span>,
         ]}>
         <Meta
           avatar={<Avatar src={image ? image : defaultImg} />}
           title={feeds?.nickName}
-          description='This is the description'
+          description={feeds?.Bio}
         />
         {feeds?.likes.find((item) => item === currentUserId) && (
           <EllipsisOutlined key='ellipsis' />
         )}
-        {feeds?.nickName}-{feeds?.Bio}--{feeds?.Religion}
+        {/* {feeds?.nickName}---{feeds?.Religion} */}
       </Card>
     </div>
   );
