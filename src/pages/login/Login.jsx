@@ -54,7 +54,6 @@ const Login = () => {
                 // offset: 1,
                 span: 19,
               }}
-              // label='Email'
               label={<label className='inputLabels'>User Email</label>}
               name='email'
               rules={[

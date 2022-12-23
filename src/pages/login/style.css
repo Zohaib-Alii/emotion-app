@@ -39,3 +39,8 @@
 .alreadySignup {
   color: #fff;
 }
+/* onnly signup css */
+.signupBtnOnly {
+  display: flex;
+  justify-content: end;
+}

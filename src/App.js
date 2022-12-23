@@ -12,6 +12,7 @@ import "./App.css";
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const pathname = window.location.pathname;
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -23,7 +24,7 @@ function App() {
       } else {
         // User is signed out
         dispatch(settingUserID(null));
-        navigate("/login");
+        pathname === "/signup" ? navigate("/signup") : navigate("/login");
       }
     });
   }, []);

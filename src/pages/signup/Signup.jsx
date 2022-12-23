@@ -3,7 +3,7 @@ import { Button, Checkbox, Form, Input, Layout } from "antd";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
-
+import "../login/style.css";
 const Signup = () => {
   const navigate = useNavigate();
   const { Content } = Layout;
@@ -33,16 +33,16 @@ const Signup = () => {
   };
   return (
     <div>
-      <Layout style={{ height: "100vh" }}>
-        <Layout>
-          <Content className='login-container'>
+      <Layout style={{ height: "100vh" }} className='login-wrapper'>
+        <Content className='login-container'>
+          <div className='from-wrapper'>
             <Form
               name='basic'
               labelCol={{
-                span: 8,
+                span: 6,
               }}
               wrapperCol={{
-                span: 16,
+                span: 18,
               }}
               initialValues={{
                 remember: true,
@@ -51,7 +51,7 @@ const Signup = () => {
               onFinishFailed={onFinishFailed}
               autoComplete='off'>
               <Form.Item
-                label='Name'
+                label={<label className='inputLabels'>Name</label>}
                 name='Name'
                 rules={[
                   {
@@ -59,10 +59,10 @@ const Signup = () => {
                     message: "Please input your Name!",
                   },
                 ]}>
-                <Input />
+                <Input className='loginInputs' />
               </Form.Item>
               <Form.Item
-                label='Email'
+                label={<label className='inputLabels'>Email</label>}
                 name='email'
                 rules={[
                   {
@@ -70,10 +70,10 @@ const Signup = () => {
                     message: "Please input your Email!",
                   },
                 ]}>
-                <Input />
+                <Input className='loginInputs' />
               </Form.Item>
               <Form.Item
-                label='Password'
+                label={<label className='inputLabels'>Password</label>}
                 name='password'
                 rules={[
                   {
@@ -81,31 +81,17 @@ const Signup = () => {
                     message: "Please input your password!",
                   },
                 ]}>
-                <Input.Password />
+                <Input.Password className='loginInputs' />
               </Form.Item>
 
-              <Form.Item
-                name='remember'
-                valuePropName='checked'
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
-                }}>
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-
-              <Form.Item
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
-                }}>
+              <Form.Item className='signupBtnOnly'>
                 <Button type='primary' htmlType='submit'>
                   Submit
                 </Button>
               </Form.Item>
             </Form>
-          </Content>
-        </Layout>
+          </div>
+        </Content>
       </Layout>
     </div>
   );
