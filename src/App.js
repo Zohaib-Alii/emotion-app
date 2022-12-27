@@ -19,6 +19,7 @@ function App() {
         debugger;
         dispatch(settingUserID(user));
         // User is signed in, see docs for a list of available properties
+        // new things add
         navigate("/dashboard");
         console.log(user, "App.js use effect ");
       } else {
