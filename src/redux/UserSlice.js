@@ -21,9 +21,16 @@ const currentUserSlice = createSlice({
     handleStateCheck: (state, action) => {
       state.currentUser = action.payload;
     },
+    handleDoubleCheck: (state, action) => {
+      state.userID = action.payload;
+    },
   },
 });
-export const { settingUserID, handleFeeds, handleStateCheck } =
-  currentUserSlice.actions;
+export const {
+  handleDoubleCheck,
+  settingUserID,
+  handleFeeds,
+  handleStateCheck,
+} = currentUserSlice.actions;
 
 export default currentUserSlice.reducer;
