@@ -25,6 +25,9 @@ const currentUserSlice = createSlice({
       state.userID = action.payload;
       state.test = action.payload;
     },
+    testHandler: (state, action) => {
+      state.userID = action.payload;
+    },
   },
 });
 export const {
