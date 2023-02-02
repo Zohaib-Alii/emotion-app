@@ -23,7 +23,6 @@ const currentUserSlice = createSlice({
     },
     handleDoubleCheck: (state, action) => {
       state.userID = action.payload;
-      state.test = action.payload;
     },
   },
 });
