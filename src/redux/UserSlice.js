@@ -18,12 +18,8 @@ const currentUserSlice = createSlice({
     handleFeeds: (state, action) => {
       state.allFeeds = action.payload;
     },
-    handleStateCheck: (state, action) => {
-      state.currentUser = action.payload;
-    },
   },
 });
-export const { settingUserID, handleFeeds, handleStateCheck } =
-  currentUserSlice.actions;
+export const { settingUserID, handleFeeds } = currentUserSlice.actions;
 
 export default currentUserSlice.reducer;
