@@ -16,9 +16,7 @@ const Feeds = () => {
   const [feedsData, setFeedsData] = useState([]);
   console.log(feedsData, "*****");
   useEffect(() => {
-    // debugger;
     const q = query(collection(db, "usersData"), where("id", "==", userID));
-    // console.log(q, "check query result", userID);
     const realTimeFeeds = onSnapshot(q, (querysnapshot) => {
       const temp = [];
       querysnapshot.docs.forEach((doc) => {
