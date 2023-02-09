@@ -13,7 +13,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { db, storage } from "../firebase/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AddNewFeed from "./drawers/AddNewFeed";
-const { Header, Footer, Sider, Content } = Layout;
+const { Content } = Layout;
 const { TextArea } = Input;
 const AddProfile = () => {
   const [imageUrl, setimageUrl] = useState(null);
@@ -34,6 +34,7 @@ const AddProfile = () => {
         });
     });
   };
+  console.log(imageUrl, "imageUrl");
   const [form] = Form.useForm();
   const onFinish = async (values) => {
     debugger;

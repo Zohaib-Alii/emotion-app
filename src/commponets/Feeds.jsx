@@ -25,6 +25,7 @@ const Feeds = () => {
         debugger;
         temp.push({ ...doc.data(), id: doc.id });
       });
+      debugger;
       setFeedsData(temp);
       dispatch(handleFeeds(temp));
     });
