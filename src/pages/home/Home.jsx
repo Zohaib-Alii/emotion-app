@@ -49,11 +49,6 @@ const Home = () => {
               </Link>
             </div>
           </Header>
-          <Routes>
-            <Route path='*' element={<HomeContent />} />
-            <Route path='addNewFeed' element={<AddProfile />} />
-            <Route path='feeds' element={<Feeds />} />
-          </Routes>
         </Layout>
       </Layout>
     </>
