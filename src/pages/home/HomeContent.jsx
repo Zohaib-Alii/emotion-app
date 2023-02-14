@@ -33,11 +33,6 @@ const HomeContent = () => {
           <MainContent key={feed?.id} feeds={feed} />
         ))}
       </Content>
-      <Routes>
-        <Route path='*' element={<HomeContent />} />
-        <Route path='addNewFeed' element={<AddProfile />} />
-        <Route path='feeds' element={<Feeds />} />
-      </Routes>
     </>
   );
 };
