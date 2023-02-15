@@ -18,7 +18,6 @@ const HomeContent = () => {
           console.log("querysnapshot", doc);
           temp.push({ ...doc.data(), id: doc.id });
         });
-        debugger;
         setTimeline(temp);
         dispatch(handleFeeds(temp));
       }
