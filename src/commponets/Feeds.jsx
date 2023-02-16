@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Button, Layout } from "antd";
-import { Link } from "react-router-dom";
+import { Layout } from "antd";
+
 import MainContent from "./MainContent";
 import { onSnapshot, query } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { collection, where } from "firebase/firestore";
 import { handleFeeds } from "../redux/UserSlice";
+import UploadFilePpt from "./UploadFilePpt";
+
 const { Content } = Layout;
 
 const Feeds = () => {
@@ -37,6 +39,7 @@ const Feeds = () => {
       {feedsData.map((feed) => (
         <MainContent feeds={feed} />
       ))}
+      <UploadFilePpt />
     </Content>
   );
 };
